@@ -1,0 +1,6 @@
+host: your.host.com 
+port: 25
+subject: Your Subject 
+from_email: sender@email.com 
+to_emails:
+  - recipient@email.com 
