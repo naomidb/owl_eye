@@ -133,3 +133,4 @@ ENV/
 config.yaml
 logs/*
 test.*
+uploads.txt
