@@ -1,4 +1,6 @@
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import mimetypes
 import re
 import smtplib
 import sys
@@ -63,23 +65,44 @@ def create_message(pubs, publishers, journals, authors):
     return message
 
 def create_email(message, config, pub_num):
-    preamble = '''
-Hello UF VIVO COmmunity,
+    body = '''
+Hello UF VIVO Community,
 
-{} publications have been added to VIVO. The publications are from the most recent import of data from Thompson Reuters. The titles of the new publications are listed below, along with new publishers, journals, and people.
+{} publications have been added to VIVO. The publications are from the most recent import of data from Thompson Reuters. The titles of the new publications are attached, along with new publishers, journals, and people.
 
 Regards,
 The CTSIT VIVO Team
-\n\n\n\n
+\n\n
 '''.format(pub_num)
-    message = preamble + message
-    msg = MIMEText(message)
-    msg['Subject'] = config.get('subject')
+    #message = preamble + message
+    #message = preamble
+    with open('uploads.txt', 'w') as upload_log:
+        upload_log.write(message)
+    fileToSend = 'uploads.txt'
+
+    msg = MIMEMultipart()
     msg['From'] = config.get('from_email')
+    msg['Subject'] = config.get('subject')
 
     to_list = config.get('to_emails')
     to_string = ",".join(to_list)
     msg['To'] = to_string
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    ctype, encoding = mimetypes.guess_type(fileToSend)
+    if ctype is None or encoding is not None:
+        ctype = "application/octet-stream"
+
+    maintype, subtype = ctype.split("/", 1)
+
+    if maintype == "text":
+        fp = open(fileToSend)
+        attachment = MIMEText(fp.read(), _subtype=subtype)
+        fp.close()
+
+    attachment.add_header("Content-Disposition", "attachment", filename=fileToSend)
+    msg.attach(attachment)
 
     return msg
 
