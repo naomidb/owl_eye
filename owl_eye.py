@@ -110,7 +110,11 @@ def connect_to_smtp(host, port):
     try:
         connection = smtplib.SMTP(host=host,
                                   port=port,)
-    except smtplibSMTPConnectError as e:
+        connection.starttls()
+        login = raw_input("Enter your gatorlink: ")
+        password = raw_input("Enter your password: ")
+        connection.login(login, password)
+    except smtplib.SMTPConnectError as e:
         print(e)
         connection = None
 
