@@ -68,7 +68,7 @@ def create_email(message, config, pub_num):
     body = '''
 Hello UF VIVO Community,
 
-{} publications have been added to VIVO. The publications are from the most recent import of data from Thompson Reuters. The titles of the new publications are attached, along with new publishers, journals, and people.
+{} publications have been added to VIVO. The publications are from the most recent import of data from Clarivate's Web of Science. The titles of the new publications are attached, along with new publishers, journals, and people.
 
 Regards,
 The CTSIT VIVO Team
