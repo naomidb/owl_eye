@@ -4,6 +4,7 @@ import mimetypes
 import re
 import smtplib
 import sys
+import getpass
 from time import localtime, strftime
 import yaml
 
@@ -112,7 +113,7 @@ def connect_to_smtp(host, port):
                                   port=port,)
         connection.starttls()
         login = raw_input("Enter your gatorlink: ")
-        password = raw_input("Enter your password: ")
+        password = getpass.getpass("Enter your password: ")
         connection.login(login, password)
     except smtplib.SMTPConnectError as e:
         print(e)
@@ -125,7 +126,7 @@ def send_message(msg, connection, config):
     connection.quit()
 
 def main(vivo_path):
-    config = get_config('config.yaml')
+    config = get_config('config.example.yaml')
     pub = 'http://purl.org/ontology/bibo/AcademicArticle'
     publisher = 'http://vivoweb.org/ontology/core#Publisher'
     journal = 'http://purl.org/ontology/bibo/Journal'
@@ -167,5 +168,3 @@ def main(vivo_path):
 
 if __name__ == '__main__':
     main(sys.argv[1])
-
-
